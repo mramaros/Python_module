@@ -6,7 +6,7 @@
 #    By: mramaros <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/12 23:08:00 by mramaros          #+#    #+#              #
-#    Updated: 2026/04/13 08:07:29 by mramaros         ###   ########.fr        #
+#    Updated: 2026/04/13 08:35:02 by mramaros         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,16 +25,16 @@ class Plant():
     def __init__(self, name, height, age):
         self._name = name
         self._age = 0
-        self._heiht = 0
+        self._height = 0
         self.set_height(height)
         self.set_age(age)
 
-    @classmethode
-    def unonynous(cls):
+    @classmethod
+    def anonynous(cls):
         return cls("Unknow types", 0, 0)
 
-    @staticmethode
-    def is_older_than_a_year(age)
+    @staticmethod
+    def is_older_than_a_year(age):
         return age > 365
 
     def get_age(self)-> int:
