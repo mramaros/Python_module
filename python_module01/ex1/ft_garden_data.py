@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-
-
+ 
+ 
 class Plant:
-    def show(self):
+    def __init__(self) -> None:
+        self.name: str = ""
+        self.height: float = 0.0
+        self.age: int = 0
+ 
+    def show(self) -> None:
         print(f"{self.name}: {self.height}cm, {self.age} days old")
 
 
