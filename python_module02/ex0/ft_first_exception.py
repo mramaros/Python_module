@@ -16,8 +16,8 @@ def test_temperature()->None:
         except Exception as e:
             print(f"Caught input_temperature error: {e}\n")
 
-    print("All test completed - prgram didn't crash")
+    print("All test completed - program didn't crash")
 
 
 if __name__ == "__main__":
-    test_temperature()
+    test_temperature = {"", ""}
