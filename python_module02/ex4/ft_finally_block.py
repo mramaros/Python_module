@@ -32,10 +32,10 @@ def test_watering_system(plants: list) -> None:
 
 if __name__ == "__main__":
     print("=== Garden Watering System ===")
-    
+
     print("\nTesting valid plants...")
     test_watering_system(["Tomato", "Lettuce", "Carrots"])
-    
+
     print("\nTesting invalid plants...")
     test_watering_system(["Tomato", "lettuce"])
 
