@@ -8,7 +8,7 @@ def garden_operations(operation_number) -> None:
     elif operation_number == 2:
         open("non/existent/file")
     elif operation_number == 3:
-        print("hello" + 5)
+        "hello" + 5
     else:
         print("Operation completed successfully")
 
