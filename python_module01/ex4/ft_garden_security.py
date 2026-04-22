@@ -5,9 +5,11 @@ class Plant():
     def __init__(self, name, height, age):
         self._name = name
         self._height = 0.0
+        if height > 0.0:
+            self._height = height
         self._age = 0
-        self.set_height(height)
-        self.set_age(age)
+        if age > 0:
+            self._age = age
 
     def get_height(self) -> int:
         return self._height
