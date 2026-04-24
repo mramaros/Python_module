@@ -2,7 +2,7 @@
 
 import math
 
-def get_pos() -> tuple[float, float, float]:
+def get_player_pos() -> tuple[float, float, float]:
     while True:
         try:
             line = input("Enter new coordinates as floats in format 'x,y,z': ")
@@ -27,7 +27,7 @@ def main() -> None:
     print("=== Game Coordinate System ===")
 
     print("\nGet a first set of coordinates")
-    pos1 = get_pos()
+    pos1 = get_player_pos()
 
     print(f"Got a first tuple: {pos1}")
     print(f"It includes: X={pos1[0]}, Y={pos1[1]}, Z={pos1[2]}")
@@ -36,7 +36,7 @@ def main() -> None:
     print(f"Distance to center: {dist_center:.4f}")
 
     print("\nGet a second set of coordinates")
-    pos2 = get_pos()
+    pos2 = get_player_pos()
 
     dist_between = math.sqrt((pos2[0] - pos1[0])**2 +
                              (pos2[1] - pos1[1])**2 +
