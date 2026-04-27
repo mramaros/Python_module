@@ -21,7 +21,7 @@ def main() -> None:
 
     player : dict[str, set[str]] = {
         "Alice" : gen_player_achievements(),
-        "BOb" : gen_player_achievements(),
+        "Bob" : gen_player_achievements(),
         "Charlie" : gen_player_achievements(),
         "Dylan" : gen_player_achievements(),
         "Dylan" : gen_player_achievements()
@@ -30,21 +30,21 @@ def main() -> None:
     for name, achivement in player.items():
         print(f"Player {name}: {achivement}")
 
-    all_distinct = (player["Alice"] | player["Bob"] | 
+    all_distinct = (player["Alice"] | player["Bob"] |
                     player["Charlie"] | player["Dylan"])
-
-    print("\nAll distinct achivements: {all_distinct}")
+    print(f"\nAll distinct achievements: {all_distinct}")
 
     common = (player["Alice"] & player["Bob"] &
             player["Charlie"] & player["Dylan"])
-    print(f"Common achivement: {common}")
+    print(f"\nCommon achivement: {common}\n")
 
-#    for name, current_set in player.items():
-#        others = [s for n, s in player.items() if n != name]
-#        other_union = set().union(*others)
-#        only_this_player = current_set - other_union
-#        print(f"Only{name} has: {only_this_player if only_this_player else 'set()'}")
+    for name, current_set in player.items():
+        others = [s for n, s in player.items() if n != name]
+        other_union = set().union(*others)
+        only_this_player = current_set - other_union
+        print(f"Only{name} has: {only_this_player if only_this_player else 'set()'}")
 
+    print("")
     for name, current_set in player.items():
         missing = all_distinct - current_set
         print(f"{name} is missing: {missing}")
