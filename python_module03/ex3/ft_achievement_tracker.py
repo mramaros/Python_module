@@ -23,6 +23,7 @@ def main() -> None:
         "Alice" : gen_player_achievements(),
         "BOb" : gen_player_achievements(),
         "Charlie" : gen_player_achievements(),
+        "Dylan" : gen_player_achievements(),
         "Dylan" : gen_player_achievements()
     }
 
@@ -38,11 +39,11 @@ def main() -> None:
             player["Charlie"] & player["Dylan"])
     print(f"Common achivement: {common}")
 
-    for name, current_set in player.items():
-        others = [s for n, s in player.items() if n != name]
-        other_union = set().union(*others)
-        only_this_player = current_set - other_union
-        print(f"Only{name} has: {only_this_player if only_this_player else 'set()'}")
+#    for name, current_set in player.items():
+#        others = [s for n, s in player.items() if n != name]
+#        other_union = set().union(*others)
+#        only_this_player = current_set - other_union
+#        print(f"Only{name} has: {only_this_player if only_this_player else 'set()'}")
 
     for name, current_set in player.items():
         missing = all_distinct - current_set
