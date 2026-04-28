@@ -8,7 +8,7 @@ def main() -> None:
 
     raw_args = sys.argv[1:]
     if not raw_args:
-        print("sorry, during the game, your invetory is actually empty ;)")
+        print("At the beginning of the game, your inventory is usually empty ;)")
         return
 
     invetory: dict[str, int] = {}
@@ -45,11 +45,20 @@ def main() -> None:
         percentage = (quantity / total_quantity) * 100
         print(f"Item {item} represents {percentage:.1f}%")
 
-    max_nbr_item = max(invetory, key=invetory.get)
-    min_nbr_item = min(invetory, key=invetory.get)
+    most_abondant = items_list[0]
+    less_abondant = items_list[0]
 
-    print(f"Item most abundant: {item} with quantity {max_nbr_item}")
-    print(f"Item least abundant: {item} with quantity {min_nbr_item}")
+    for item in items_list:
+        if invetory[item] > invetory[most_abondant]:
+            most_abondant = item
+
+        if invetory[item] < invetory[less_abondant]:
+            less_abondant = item
+
+    print(f"Item most abundant: {most_abondant} with quantity {invetory.get(most_abondant)}")
+    print(f"Item least abundant: {less_abondant} with quantity {invetory.get(less_abondant)}")
+
+    invetory["magic_item"] = 1
 
     print(f"Updated inventory: {invetory}")
 

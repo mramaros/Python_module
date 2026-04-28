@@ -24,7 +24,6 @@ def main() -> None:
         "Bob" : gen_player_achievements(),
         "Charlie" : gen_player_achievements(),
         "Dylan" : gen_player_achievements(),
-        "Dylan" : gen_player_achievements()
     }
 
     for name, achivement in player.items():
