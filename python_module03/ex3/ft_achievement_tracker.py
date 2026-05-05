@@ -2,6 +2,7 @@
 
 import random
 
+
 def gen_player_achievements() -> set[str]:
 
     all_achivement: list[str] = [
@@ -19,11 +20,11 @@ def gen_player_achievements() -> set[str]:
 def main() -> None:
     print("=== Achievement Tracker System ===")
 
-    player : dict[str, set[str]] = {
-        "Alice" : gen_player_achievements(),
-        "Bob" : gen_player_achievements(),
-        "Charlie" : gen_player_achievements(),
-        "Dylan" : gen_player_achievements(),
+    player: dict[str, set[str]] = {
+        "Alice": gen_player_achievements(),
+        "Bob": gen_player_achievements(),
+        "Charlie": gen_player_achievements(),
+        "Dylan": gen_player_achievements(),
     }
 
     for name, achivement in player.items():
@@ -33,15 +34,18 @@ def main() -> None:
                     player["Charlie"] | player["Dylan"])
     print(f"\nAll distinct achievements: {all_distinct}")
 
-    common = (player["Alice"] & player["Bob"] &
-            player["Charlie"] & player["Dylan"])
+    common = (
+        player["Alice"] & player["Bob"] &
+        player["Charlie"] & player["Dylan"]
+    )
     print(f"\nCommon achivement: {common}\n")
 
     for name, current_set in player.items():
         others = [s for n, s in player.items() if n != name]
         other_union = set().union(*others)
         only_this_player = current_set - other_union
-        print(f"Only{name} has: {only_this_player if only_this_player else 'set()'}")
+        print(f"Only{name} has: ", end="")
+        print(f"{only_this_player if only_this_player else 'set()'}")
 
     print("")
     for name, current_set in player.items():

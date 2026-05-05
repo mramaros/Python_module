@@ -8,7 +8,8 @@ def main() -> None:
 
     raw_args = sys.argv[1:]
     if not raw_args:
-        print("At the beginning of the game, your inventory is usually empty ;)")
+        print("At the beginning of the game,", end="")
+        print("your inventory is usually empty ;)")
         return
 
     invetory: dict[str, int] = {}
@@ -55,13 +56,14 @@ def main() -> None:
         if invetory[item] < invetory[less_abondant]:
             less_abondant = item
 
-    print(f"Item most abundant: {most_abondant} with quantity {invetory.get(most_abondant)}")
-    print(f"Item least abundant: {less_abondant} with quantity {invetory.get(less_abondant)}")
+    print(f"Item most abundant: {most_abondant}", end="")
+    print(f" with quantity {invetory.get(most_abondant)}")
+    print(f"Item least abundant: {less_abondant} ", end="")
+    print(f"with quantity {invetory.get(less_abondant)}")
 
     invetory["magic_item"] = 1
 
     print(f"Updated inventory: {invetory}")
-
 
 
 if __name__ == "__main__":

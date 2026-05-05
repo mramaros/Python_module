@@ -6,9 +6,10 @@ import random
 def main() -> None:
     print("=== Game Data Alchemist ===")
 
-    players: list[str] = {
-            "Alice", "bob", "Charlie", "dylan", "Emma", "Gregory", "john", "kevin", "Liam"
-            }
+    players: list[str] = [
+            "Alice", "bob", "Charlie", "dylan",
+            "Emma", "Gregory", "john", "kevin", "Liam"
+            ]
 
     print(f"Initial list of players: {players}")
 
@@ -22,7 +23,7 @@ def main() -> None:
 
     score = {name: random.randint(0, 1000) for name in all_capitalized}
     print(f"Score dict: {score}")
-    
+
     average = sum(score.values()) / len(score)
     print(f"Score average is: {average:.2f}")
 

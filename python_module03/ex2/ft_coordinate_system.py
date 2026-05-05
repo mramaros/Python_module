@@ -2,6 +2,7 @@
 
 import math
 
+
 def get_player_pos() -> tuple[float, float, float]:
     while True:
         try:
