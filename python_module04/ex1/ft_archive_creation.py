@@ -14,5 +14,5 @@ def main() -> None:
             with open(file_text, 'r', encoding='utf-8') as file:
                 content = file.read()
                 print(f"---\n\n{content}\n---")
-
+                print(f"file '{file_text}' closed")
 
