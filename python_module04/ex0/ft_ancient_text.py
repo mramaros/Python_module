@@ -6,7 +6,7 @@ import typing
 
 def main() ->None:
     if len(sys.argv) < 2:
-        print("sage: ft_ancient_text.py <file>")
+        print("usage: ft_ancient_text.py <file>")
     else:
         file_text = sys.argv[1]
         try:
