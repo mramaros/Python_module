@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-import typing
+
 
 def main() -> None:
     if len(sys.argv) != 2:
@@ -33,7 +33,7 @@ def main() -> None:
         file.close()
 
     except Exception as e:
-            print(f"Error opening file '{file_text}: {e}")
+        print(f"Error opening file '{file_text}: {e}")
 
 
 if __name__ == "__main__":

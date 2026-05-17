@@ -2,6 +2,7 @@
 
 import sys
 
+
 def main() -> None:
     if len(sys.argv) != 2:
         print("usage: ft_ancient_text.py <file>")
@@ -15,10 +16,10 @@ def main() -> None:
             print(f"---\n\n{content}\n---")
             print(f"File '{file_text}' closed")
             new_content = content.replace("\n", "#\n")
-            
+
             print(f"Transform data:\n---{new_content}\n---")
 
-            print("Enter new file name (or empty): ",end="", flush=True)
+            print("Enter new file name (or empty): ", end="", flush=True)
             new_file = sys.stdin.readline().strip()
 
             if new_file:
@@ -30,6 +31,7 @@ def main() -> None:
         except Exception as e:
             print(f"[STDERR] Error opening file 'file_text': {e}")
             print("Data not saved")
+
 
 if __name__ == "__main__":
     main()
