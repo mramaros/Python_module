@@ -1,23 +1,22 @@
 #!/usr/bin/python3
 
 class GardenError(Exception):
-    def __init__(self, message: str = "Unknown garden error"):
+    def __init__(self, message: str = "Unknown garden error") -> None:
         super().__init__(message)
 
 
 class PlantError(GardenError):
-    def __init__(self, message: str = "Unknown plant error"):
+    def __init__(self, message: str = "Unknown plant error") -> None:
         super().__init__(message)
 
 
-def water_plant(plant_name):
-    if not plant_name[0].isupper():
+def water_plant(plant_name: str) -> None:
+    if not plant_name or not plant_name[0].isupper():
         raise PlantError(f"Invalide plant name to water: '{plant_name}'")
-    else:
-        print(f"Watering {plant_name}: [OK]")
+    print(f"Watering {plant_name}: [OK]")
 
 
-def test_watering_system(plants: list) -> None:
+def test_watering_system(plants: list[str]) -> None:
     print("Operating Watering system")
     try:
         for plant in plants:
