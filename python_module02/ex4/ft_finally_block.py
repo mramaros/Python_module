@@ -11,7 +11,7 @@ class PlantError(GardenError):
 
 
 def water_plant(plant_name: str) -> None:
-    if not plant_name or not plant_name[0].isupper():
+    if plant_name != plant_name.capitalize():
         raise PlantError(f"Invalide plant name to water: '{plant_name}'")
     print(f"Watering {plant_name}: [OK]")
 

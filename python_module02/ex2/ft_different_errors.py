@@ -25,8 +25,8 @@ def test_error_types() -> None:
             print(f"Caught ZeroDivisionError: {e}")
         except FileNotFoundError as e:
             print(f"Caught FileNotFoundError: {e}")
-        except (TypeError, Exception) as e:
-            print(f"Caught error: {e}")
+        except (TypeError) as e:
+            print(f"Caught TypeError: {e}")
 
     print("\nAll error types tested successfully!")
 
