@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+
+from abc import ABC, abstractmethod
+import typing
+from typing import Any, List, Dict, Union, Tuple, Protocol
+
+class DataProcessor:
+    def __init__(self) -> None:
+        self._storage: list[Any] = []
+        self._rank = 0
+
+    @abstractmethod
+    def validate(self, data: Any) -> bool:
+        pass
+    @abstractmethod
+    def ingest(self) -> None:
+        pass
+
+    def add_to_registry(self, data) -> None:
+        self._data_registry.append(data)
+
+    def otput(self) -> Tuple[int, str]:
+        item = self._storage.pop(0)
+        rank = self._rank
+        self._rank += 1
+        return (rank, item)
+
+
+class NumericProcessor(DataProcessor):
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, (int, float)):
+            return True
+        if isinstance(data, list):
+            return all(isinstance(item, (int, float)) for item in data)
+        else:
+            return False
+
+    def ingest(self, data: int | float | list[int | float]) -> None:
+        if not self.validate(data):
+            raise Exception("Improper numeric data")
+        elif isinstance(data, list):
+            for item in data:
+                self._storage.append(str(item))
+        else:
+            self._storage.append(str(data))
+
+
+class TextProcessor(DataProcessor):
+
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, str):
+            return True
+        if isinstance(data, list):
+            return all(isinstance(item, str) for item in data)
+        return False
+
+    def ingest(self, data: Any) -> None:
+        if not self.validate(data):
+            raise Exception("Improper text data")
+        if isinstance(data, list):
+            for item in data:
+                self._storage.append(item)
+        else:
+            self._storage.append(data)
+
+
+class LogProcessor(DataProcessor):
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, dict):
+            for k, v in data.items():
+                if not isinstance(k, str) or not isinstance(v, str):
+                    return False
+            return True
+        elif isinstance(data, list):
+            for item in data:
+                if not isinstance(item, dict):
+                    return False
+                for k, v in item.items():
+                    if not isinstance(k, str) or not isinstance(v, str):
+                        return False
+            return True
+        else:
+            return False
+
+    def ingest(self, data: Any) -> None:
+        if not self.validate(data):
+            raise Exception("Imroper log data")
+        elif isinstance(data, list):
+            for item in data:
+                self._storage.append(f"{item['log_level']}, {item['log_message']}")
+        else:
+            self._storage.append(f"{data['log_level']}, {data['log_message']}")
+
+class ExportPlugin(Protocol):
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        ...
+
+
+class DataStream(ABC):
+    def __init__ (self) -> None:
+        self._processors: list[DataProcessor] = []
+        self._total_processor: dict[str, int] = {}
+
+    def register_processor(self, proc: DataProcessor) -> None:
+        self._processors.append(proc)
+        self._total_processor[type(proc).__name__] = 0
+
+    def process_stream(self, stream: list[typing.Any]) -> None:
+        for item in stream:
+            check = False
+            for proc in self._processors:
+                if proc.validate(item):
+                    proc.ingest(item)
+                    name = type(proc).__name__
+                    if isinstance(item, list):
+                        self._total_processor[name] += len(item)
+                    else:
+                        self._total_processor[name] += 1
+                    check = True
+                    break
+            if not check:
+                print(f"DataStream error - Can't process element in stream: {item}")
+
+    def print_processors_stats(self) -> None:
+        print("== DataStream statistics ==")
+
+        if not self._processors:
+            print("No processor found, no data")
+            return
+        for proc in self._processors:
+            name = type(proc).__name__
+            total = self._total_processor[name]
+            remaining = len (proc._storage)
+            print(f"{name}: total {total} items processed, remaining {remaining} on processor")
+
+    def otput_pipline(self, nb: int, plugin: ExportPlugin) -> None:
+        for proc in self._processors:
+            data: list[tuple[int, str]] = []
+            aivable = min(nb.len(proc._storage))
+            for _ in range(aivable):
+                data.append(proc.otput())
+            if data:
+                plugin.process_output(data)
+
+
+
+def main() -> None:
+    print("=== Code Nexus - Data Stream ===")
+
+if __name__ == "__main__":
+    main()
