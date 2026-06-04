@@ -20,6 +20,10 @@ def main() -> None:
             continue
 
         item, quantity_str = arg.split(":", 1)
+        if not item:
+            print(f"\nError message: '{item}' is a empty value\n")
+            break
+
         if item in invetory:
             print(f"Reduntant item '{item}' - discarding")
             continue
@@ -43,7 +47,10 @@ def main() -> None:
     print(f"Total quantity of the {len(items_list)} items: {total_quantity}")
 
     for item, quantity in invetory.items():
-        percentage = (quantity / total_quantity) * 100
+        try:
+            percentage = (quantity / total_quantity) * 100
+        except Exception:
+            percentage = 0
         print(f"Item {item} represents {percentage:.1f}%")
 
     most_abondant = items_list[0]
