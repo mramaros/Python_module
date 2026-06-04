@@ -49,7 +49,7 @@ def main() -> None:
     for item in invetory.keys():
         quantity = invetory[item]
         if quantity <= 0:
-            percentage = 0
+            percentage: float = 0
         else:
             percentage = (quantity / total_quantity) * 100
         print(f"Item {item} represents {percentage:.1f}%")
