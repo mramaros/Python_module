@@ -46,7 +46,7 @@ def main() -> None:
     total_quantity = sum(invetory.values())
     print(f"Total quantity of the {len(items_list)} items: {total_quantity}")
 
-    for item, quantity in invetory.items():
+    for item, quantity in zip(invetory.keys(), invetory.values()):
         try:
             percentage = (quantity / total_quantity) * 100
         except Exception:
@@ -64,9 +64,9 @@ def main() -> None:
             less_abondant = item
 
     print(f"Item most abundant: {most_abondant}", end="")
-    print(f" with quantity {invetory.get(most_abondant)}")
+    print(f" with quantity {invetory[most_abondant]}")
     print(f"Item least abundant: {less_abondant} ", end="")
-    print(f"with quantity {invetory.get(less_abondant)}")
+    print(f"with quantity {invetory[less_abondant]}")
 
     invetory["magic_item"] = 1
 
