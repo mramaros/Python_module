@@ -10,11 +10,12 @@ def main() -> None:
 
     file_text = sys.argv[1]
     try:
-        file = open(file_text, 'r', encoding='utf-8')
+        io: typing.IO = open(file_text, 'r', encoding='utf-8')
         print(f"Accessing file '{file_text}'")
-        content = file.read()
+        content = io.read()
         print(f"---\n\n{content}\n---")
         print(f"file '{file_text}' closed")
+        io.close()
 
         print("\nTransform data:\n")
         new_content = content.replace("\n", "#\n")
@@ -24,13 +25,12 @@ def main() -> None:
 
         if new_file:
             print(f"Saving data to : {new_file}")
-            result = open(new_file, 'w', encoding='utf-8')
-            result.write(new_content)
+            io:typing.IO = open(new_file, 'w', encoding='utf-8')
+            io.write(new_content)
             print(f"Data saved in file '{new_file}'")
-            result.close()
+            io.close()
         else:
             print("Not saving data.")
-        file.close()
 
     except Exception as e:
         print(f"Error opening file '{file_text}: {e}")

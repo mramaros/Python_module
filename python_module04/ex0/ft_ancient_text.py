@@ -14,6 +14,7 @@ def main() -> None:
             content = file.read()
             print(f"---\n\n{content}\n---")
             print(f"file '{file_text}' closed")
+            file.close()
         except Exception as e:
             print(f"Error opening file '{file_text}: {e}")
 

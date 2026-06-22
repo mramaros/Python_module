@@ -1,29 +1,31 @@
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
-import typing
-from typing import Any, List, Dict, Union, Tuple
+from typing import Any, Dict, List, Tuple
 
-class DataProcessor:
+
+class DataProcessor(ABC):
     def __init__(self) -> None:
-        self._storage: list[Any] = []
-        self._rank = 0
+        self._storage: List[str] = []
+        self._rank: int = 0
+        self._data_registry: List[Any] = []
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
-        pass
-    @abstractmethod
-    def ingest(self) -> None:
-        pass
+        ...
 
-    def add_to_registry(self, data) -> None:
+    @abstractmethod
+    def ingest(self, data: Any) -> None:
+        ...
+
+    def add_to_registry(self, data: Any) -> None:
         self._data_registry.append(data)
 
-    def otput(self) -> Tuple[int, str]:
+    def output(self) -> Tuple[int, str]:
         item = self._storage.pop(0)
         rank = self._rank
         self._rank += 1
-        return (rank, item)
+        return rank, item
 
 
 class NumericProcessor(DataProcessor):
@@ -35,7 +37,9 @@ class NumericProcessor(DataProcessor):
         else:
             return False
 
-    def ingest(self, data: int | float | list[int | float]) -> None:
+    def ingest(
+        self, data: int | float | List[int | float]
+    ) -> None:
         if not self.validate(data):
             raise Exception("Improper numeric data")
         elif isinstance(data, list):
@@ -54,7 +58,7 @@ class TextProcessor(DataProcessor):
             return all(isinstance(item, str) for item in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self, data: str | List[str]) -> None:
         if not self.validate(data):
             raise Exception("Improper text data")
         if isinstance(data, list):
@@ -82,39 +86,46 @@ class LogProcessor(DataProcessor):
         else:
             return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(
+        self, data: Dict[str, str] | List[Dict[str, str]]
+    ) -> None:
         if not self.validate(data):
             raise Exception("Imroper log data")
         elif isinstance(data, list):
             for item in data:
-                self._storage.append(f"{item['log_level']}, {item['log_message']}")
+                self._storage.append(
+                    f"{item['log_level']}: {item['log_message']}"
+                )
         else:
-            self._storage.append(f"{data['log_level']}, {data['log_message']}")
+            self._storage.append(
+                f"{data['log_level']}: {data['log_message']}"
+            )
 
-class DataStream(ABC):
-    def __init__ (self) -> None:
-        self._processors: list[DataProcessor] = []
-        self._total_processor: dict[str, int] = {}
+
+class DataStream:
+    def __init__(self) -> None:
+        self._processors: List[DataProcessor] = []
+        self._total_processor: Dict[str, int] = {}
 
     def register_processor(self, proc: DataProcessor) -> None:
         self._processors.append(proc)
         self._total_processor[type(proc).__name__] = 0
 
-    def process_stream(self, stream: list[typing.Any]) -> None:
+    def process_stream(self, stream: List[Any]) -> None:
         for item in stream:
             check = False
             for proc in self._processors:
                 if proc.validate(item):
                     proc.ingest(item)
                     name = type(proc).__name__
-                    if isinstance(item, list):
-                        self._total_processor[name] += len(item)
-                    else:
-                        self._total_processor[name] += 1
+                    self._total_processor[name] += 1
                     check = True
                     break
             if not check:
-                print(f"DataStream error - Can't process element in stream: {item}")
+                print(
+                    "DataStream error - "
+                    f"Can't process element in stream: {item}"
+                )
 
     def print_processors_stats(self) -> None:
         print("== DataStream statistics ==")
@@ -125,8 +136,11 @@ class DataStream(ABC):
         for proc in self._processors:
             name = type(proc).__name__
             total = self._total_processor[name]
-            remaining = len (proc._storage)
-            print(f"{name}: total {total} items processed, remaining {remaining} on processor")
+            remaining = len(proc._storage)
+            print(
+                f"{name}: total {total} items processed, "
+                f"remaining {remaining} on processor"
+            )
 
 
 def main() -> None:
@@ -140,10 +154,17 @@ def main() -> None:
     stream.register_processor(NumericProcessor())
 
     content = [
-        'Hello world', [3.14, -1, 2.71], [{'log_level': 'WARNING', 
-        'log_message': 'Telnet access! Use ssh instead'},
-        {'log_level': 'INFO', 'log_message': 'User wil is connected'}],
-        42, ['Hi', 'five']
+        "Hello world",
+        [3.14, -1, 2.71],
+        [
+            {
+                "log_level": "WARNING",
+                "log_message": "Telnet access! Use ssh instead",
+            },
+            {"log_level": "INFO", "log_message": "User wil is connected"},
+        ],
+        42,
+        ["Hi", "five"],
     ]
 
     print(f"Send first batch of data on stream: {content}")
@@ -162,13 +183,17 @@ def main() -> None:
     print("\nConsume some elements from the data processors:", end="")
     print("Numeric 3, Text 2, Log 1")
 
-    for _ in range(3):
-        stream._processors[0].otput()
-    for _ in range(2):
-        stream._processors[1].otput()
-    for _ in range(1):
-        stream._processors[2].otput()
+    if len(stream._processors) > 0:
+        for _ in range(3):
+            stream._processors[0].output()
+    elif len(stream._processors) > 1:
+        for _ in range(2):
+            stream._processors[1].output()
+    elif len(stream._processors) > 2:
+        for _ in range(1):
+            stream._processors[2].output()
     stream.print_processors_stats()
+
 
 if __name__ == "__main__":
     main()

@@ -9,8 +9,8 @@ def  light_spell_allowed_ingredients() -> list[str]:
         ]
 
 def light_spell_record(spell_name: str, ingredients: str) -> str:
-    result :str = validate_ingredients(ingredients)
+    result: str = validate_ingredients(ingredients)
 
     if "INVALID" == result:
-        return f"Spell rejected : {ingredients} {result}"
-    return f"Spell recorded : {ingredients} {result}"
+        return f"Spell rejected: {spell_name} ({ingredients} - {result})"
+    return f"Spell recorded: {spell_name} ({ingredients} - {result})"
