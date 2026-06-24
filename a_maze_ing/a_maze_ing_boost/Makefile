@@ -1,4 +1,4 @@
-REQUIREMENTS = flake8 mypy
+REQUIREMENTS = flake8 mypy Pillow
 
 NAME_VENV = our_a_mazing
 HIS_PYTHON = $(NAME_VENV)/bin/python

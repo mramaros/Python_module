@@ -28,7 +28,8 @@ except ImportError as e:
 class maze_mlx:
     """Wrapper minimal autour de la librairie `Mlx` pour dessiner le labyrinthe."""
 
-    def __init__(self, COLS: int, ROWS: int) -> None:
+    # CORRECTION ICI : Ajout de CELL_SIZE et OUTLINE_THICKNESS pour accepter les 5 arguments
+    def __init__(self, COLS: int, ROWS: int, CELL_SIZE: int = 20, OUTLINE_THICKNESS: int = 2) -> None:
         self.COLS = COLS
         self.ROWS = ROWS
         self.mlx = Mlx()
@@ -214,8 +215,6 @@ class maze_mlx:
                 )
 
     def render_with_textures(self, all_cell: list[Cell], WIDTH: int, HEIGHT: int, CELL_SIZE: int, OUTLINE_THICKNESS: int) -> None:
-        """Rendu complet en deux passes pour éviter que le sol d'une case n'écrase le mur de sa voisine."""
-        # Passe 1 : Tout le sol
         if self.wall_textures.get("sol"):
             for y in range(HEIGHT):
                 for x in range(WIDTH):
@@ -224,7 +223,6 @@ class maze_mlx:
                         x0, y0, CELL_SIZE + OUTLINE_THICKNESS, self.wall_textures["sol"]
                     )
 
-        # Passe 2 : Tous les murs par-dessus
         for y in range(HEIGHT):
             for x in range(WIDTH):
                 cell = get_cell(all_cell, x, y, WIDTH)
@@ -242,7 +240,6 @@ class maze_mlx:
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win, self.img, 15, 15)
 
     def draw_cell_with_texture(self, cell: Cell, WIDTH: int, HEIGHT: int, CELL_SIZE: int, OUTLINE_THICKNESS: int, all_cell: list[Cell]) -> None:
-        """Dessine UNIQUEMENT les murs. Le sol est géré en amont."""
         x0, y0 = cell.x * CELL_SIZE, cell.y * CELL_SIZE
 
         if cell.wall[0]:
@@ -258,10 +255,10 @@ class maze_mlx:
         from a_maze_ing import CELL_SIZE, OUTLINE_THICKNESS
         for x in range(ENTRY_X, ENTRY_X + CELL_SIZE - OUTLINE_THICKNESS):
             for y in range(ENTRY_Y, ENTRY_Y + CELL_SIZE - OUTLINE_THICKNESS):
-                self.put_pixel(x, y, 0xFF00FF00)
+                self.put_pixel(x, y, 0xFF00FF00) # Entrée Verte
         for x in range(EXIT_X, EXIT_X + CELL_SIZE - OUTLINE_THICKNESS):
             for y in range(EXIT_Y, EXIT_Y + CELL_SIZE - OUTLINE_THICKNESS):
-                self.put_pixel(x, y, 0xFFFF0000)
+                self.put_pixel(x, y, 0xFF2F4F4F)
 
     def color_content_solver(self, all_cell: list[Cell], WIDTH: int, his_x: int, his_y: int, index: int, solver: list[tuple[int, int]], color: int):
         from a_maze_ing import CELL_SIZE, OUTLINE_THICKNESS

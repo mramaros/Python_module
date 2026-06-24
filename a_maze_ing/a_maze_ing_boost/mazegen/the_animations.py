@@ -125,7 +125,7 @@ def anime(
     else:
         if len(solver) > 0:
             initial_color = 0xFF00FF00
-            target_color = 0xFFFF0000
+            target_color = 0xFF2F4F4F
 
             a1 = (initial_color >> 24) & 0xFF
             r1 = (initial_color >> 16) & 0xFF

@@ -181,7 +181,7 @@ if __name__ == "__main__":
         try:
             from mazegen import maze_mlx, anime
 
-            my_window = maze_mlx(COLS, ROWS)
+            my_window = maze_mlx(COLS, ROWS, CELL_SIZE, OUTLINE_THICKNESS)
             
             # --- NOUVEAU : Rendu avec textures ---
             # Appeler render_with_textures pour dessiner le labyrinthe avec les images
