@@ -18,7 +18,7 @@ from mazegen import isolated_cells
 from mazegen import solver_back
 import random
 
-CELL_SIZE = 20
+CELL_SIZE = 42
 OUTLINE_THICKNESS = 7
 
 

@@ -1,8 +1,8 @@
 # ==> The number of columns, that is to say the number of cells in a row <==
-WIDTH=95
+WIDTH=30
 
 # ==> the number of lines <==
-HEIGHT=26
+HEIGHT=19
 
 # ==> the coordinates of the entrance (this is our starting point) <==
 ENTRY=0,0
