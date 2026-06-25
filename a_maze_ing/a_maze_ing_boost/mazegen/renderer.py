@@ -28,10 +28,10 @@ except ImportError as e:
 class maze_mlx:
     """Wrapper minimal autour de la librairie `Mlx` pour dessiner le labyrinthe."""
 
-    # CORRECTION ICI : Ajout de CELL_SIZE et OUTLINE_THICKNESS pour accepter les 5 arguments
     def __init__(self, COLS: int, ROWS: int, CELL_SIZE: int = 20, OUTLINE_THICKNESS: int = 2) -> None:
         self.COLS = COLS
         self.ROWS = ROWS
+        self.current_env = "normal"
         self.mlx = Mlx()
         self.mlx_ptr = self.mlx.mlx_init()
         self.win = self.mlx.mlx_new_window(
@@ -47,12 +47,16 @@ class maze_mlx:
         self.fallback_color = 0xFFFFFFFF
         self.clear_img()
 
+    def change_environment(self, env_name: str):
+        """Change dynamiquement l'environnement et recharge les textures."""
+        self.current_env = env_name
+        self.wall_textures = self._load_or_create_textures()
+
     def _load_or_create_textures(self):
         textures = {}
-        print(f"📂 Recherche des images dans: referance_a_maze_ing/")
+        print(f"📂 Recherche des images dans: referance_a_maze_ing/ pour {self.current_env.upper()}")
         if HAS_PIL:
-            print("🖼️  Chargement des textures avec PIL...")
-            textures = self._load_textures_with_pil()
+            textures = self._load_textures_with_pil(self.current_env)
         else:
             print("⚠️  PIL non disponible, utilisation des textures générées")
             textures = self._create_textures()
@@ -65,67 +69,52 @@ class maze_mlx:
             textures["sol"] = self._create_simple_texture(20, 20, 0xFF443322)
         return textures
 
-    def _load_textures_with_pil(self):
+    def _load_textures_with_pil(self, env_name="normal"):
         textures = {}
         base_path = "referance_a_maze_ing/"
         if not os.path.exists(base_path):
             print(f"❌ Dossier non trouvé: {base_path}")
             return textures
 
-        extensions = [".png", ".xpm", ".jpg", ".jpeg"]
+        noms_fichiers = {
+            "normal": ("mur_horizontal", "mur_vertical", "sol_par_cell"),
+            "sable": ("mur_horizontal_sable", "mur_vretical_sable", "sol_par_cell_sable"),
+            "donjon": ("mur_horizontal_donjon", "mur_vertical_donjon", "sol_par_cell_donjon"),
+            "lave": ("mur_horizontal_lave", "mur_vertical_lave", "sol_par_cell_lave"),
+            "glace": ("mur_horizontal_glace", "mur_vertical_glace", "sol_par_cell_glace")
+        }
+        
+        h_name, v_name, s_name = noms_fichiers.get(env_name, noms_fichiers["normal"])
 
-        for ext in extensions:
-            path = os.path.join(base_path, f"mur_horizontal{ext}")
-            if os.path.exists(path):
-                try:
-                    img = Image.open(path).convert("RGBA")
-                    pixels = []
-                    width, height = img.size
-                    for y in range(height):
-                        for x in range(width):
-                            r, g, b, a = img.getpixel((x, y))
-                            pixels.append((a << 24) | (r << 16) | (g << 8) | b)
-                    textures["horizontal"] = {"pixels": pixels, "width": width, "height": height}
-                    print(f"✅ Texture horizontale chargée: {path}")
-                    break
-                except Exception as e:
-                    print(f"❌ Erreur {path}: {e}")
-
-        for ext in extensions:
-            path = os.path.join(base_path, f"mur_vertical{ext}")
-            if os.path.exists(path):
-                try:
-                    img = Image.open(path).convert("RGBA")
-                    pixels = []
-                    width, height = img.size
-                    for y in range(height):
-                        for x in range(width):
-                            r, g, b, a = img.getpixel((x, y))
-                            pixels.append((a << 24) | (r << 16) | (g << 8) | b)
-                    textures["vertical"] = {"pixels": pixels, "width": width, "height": height}
-                    print(f"✅ Texture verticale chargée: {path}")
-                    break
-                except Exception as e:
-                    print(f"❌ Erreur {path}: {e}")
-
-        for ext in extensions:
-            path = os.path.join(base_path, f"sol_par_cell{ext}")
-            if os.path.exists(path):
-                try:
-                    img = Image.open(path).convert("RGBA")
-                    pixels = []
-                    width, height = img.size
-                    for y in range(height):
-                        for x in range(width):
-                            r, g, b, a = img.getpixel((x, y))
-                            pixels.append((a << 24) | (r << 16) | (g << 8) | b)
-                    textures["sol"] = {"pixels": pixels, "width": width, "height": height}
-                    print(f"✅ Texture du sol chargée: {path}")
-                    break
-                except Exception as e:
-                    print(f"❌ Erreur {path}: {e}")
+        self._load_single_texture(textures, "horizontal", base_path, h_name)
+        self._load_single_texture(textures, "vertical", base_path, v_name)
+        self._load_single_texture(textures, "sol", base_path, s_name)
 
         return textures
+
+    def _load_single_texture(self, textures, key, base_path, base_name):
+        extensions = [".png", ".jpg", ".jpeg"]
+        loaded = False
+        for ext in extensions:
+            path = os.path.join(base_path, f"{base_name}{ext}")
+            if os.path.exists(path):
+                try:
+                    img = Image.open(path).convert("RGBA")
+                    pixels = []
+                    width, height = img.size
+                    for y in range(height):
+                        for x in range(width):
+                            r, g, b, a = img.getpixel((x, y))
+                            pixels.append((a << 24) | (r << 16) | (g << 8) | b)
+                    textures[key] = {"pixels": pixels, "width": width, "height": height}
+                    print(f"  ✅ Texture {key} chargée: {path}")
+                    loaded = True
+                    break
+                except Exception as e:
+                    print(f"  ❌ Erreur sur {path}: {e}")
+                    
+        if not loaded:
+            print(f"  ⚠️  Texture introuvable pour : {base_name}")
 
     def _create_textures(self):
         textures = {}
@@ -201,7 +190,6 @@ class maze_mlx:
                 self.put_pixel(x0 + dx, y0 + dy, self._get_pixel_from_texture(texture, dx, global_y))
 
     def fill_all_ground(self, WIDTH: int, HEIGHT: int):
-        """Couvre toute la surface, y compris les bordures de murs, avec le sol."""
         from a_maze_ing import CELL_SIZE, OUTLINE_THICKNESS
         if not self.wall_textures.get("sol"):
             return
@@ -255,26 +243,36 @@ class maze_mlx:
         from a_maze_ing import CELL_SIZE, OUTLINE_THICKNESS
         for x in range(ENTRY_X, ENTRY_X + CELL_SIZE - OUTLINE_THICKNESS):
             for y in range(ENTRY_Y, ENTRY_Y + CELL_SIZE - OUTLINE_THICKNESS):
-                self.put_pixel(x, y, 0xFF00FF00) # Entrée Verte
+                self.put_pixel(x, y, 0xFF00FF00)
         for x in range(EXIT_X, EXIT_X + CELL_SIZE - OUTLINE_THICKNESS):
             for y in range(EXIT_Y, EXIT_Y + CELL_SIZE - OUTLINE_THICKNESS):
                 self.put_pixel(x, y, 0xFF2F4F4F)
 
+    # ✅ LA CORRECTION SE TROUVE ICI
     def color_content_solver(self, all_cell: list[Cell], WIDTH: int, his_x: int, his_y: int, index: int, solver: list[tuple[int, int]], color: int):
         from a_maze_ing import CELL_SIZE, OUTLINE_THICKNESS
-        cm = 5 // 2
         
-        center_x = his_x * CELL_SIZE + CELL_SIZE // 2
-        center_y = his_y * CELL_SIZE + CELL_SIZE // 2
+        # 1. Calcul du vrai centre dans le couloir vide (offset depuis le mur)
+        # Si CELL_SIZE = 32 et OUTLINE_THICKNESS = 12 : l'offset sera 12 + (32 - 12) // 2 = 22.
+        offset = OUTLINE_THICKNESS + (CELL_SIZE - OUTLINE_THICKNESS) // 2
+        
+        center_x = his_x * CELL_SIZE + offset
+        center_y = his_y * CELL_SIZE + offset
+        
+        # 2. Adaptation de l'épaisseur du trait au couloir (environ 1/3 de l'espace dispo)
+        path_thickness = max(1, (CELL_SIZE - OUTLINE_THICKNESS) // 3)
+        cm = path_thickness // 2
 
-        for dx in range(-1, 2):
-            for dy in range(-1, 2):
+        # Dessin du point central
+        for dx in range(-cm, cm + 1):
+            for dy in range(-cm, cm + 1):
                 self.put_pixel(center_x + dx, center_y + dy, color)
 
+        # Tracé de la ligne vers la cellule suivante
         if index < len(solver) - 1:
             next_x, next_y = solver[index + 1]
-            next_center_x = next_x * CELL_SIZE + CELL_SIZE // 2
-            next_center_y = next_y * CELL_SIZE + CELL_SIZE // 2
+            next_center_x = next_x * CELL_SIZE + offset
+            next_center_y = next_y * CELL_SIZE + offset
 
             if center_x == next_center_x:
                 y1 = min(center_y, next_center_y)

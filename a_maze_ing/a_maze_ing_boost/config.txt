@@ -1,5 +1,5 @@
 # ==> The number of columns, that is to say the number of cells in a row <==
-WIDTH=30
+WIDTH=45
 
 # ==> the number of lines <==
 HEIGHT=19

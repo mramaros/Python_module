@@ -19,13 +19,14 @@ run:
 	fi
 
 clean:
-	@rm -rf our_a_mazing
+	@rm -rf $(NAME_VENV)
 	@rm -rf mazegen/generate_maze/__pycache__
 	@rm -rf mazegen/generate_cellule/__pycache__
 	@rm -rf mazegen/solve_the_maze/__pycache__
 	@rm -rf mazegen/__pycache__
 	@rm -rf mlx/__pycache__
 	@rm -rf __pycache__
+	@rm -rf .venv
 
 re: clean all
 
