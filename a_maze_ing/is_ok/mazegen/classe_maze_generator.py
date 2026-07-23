@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""Module for generating, modifying, and solving the maze."""
 
 from .generate_cellule import Cell
 import random
@@ -7,6 +7,19 @@ from typing import Any
 
 
 class MazeGenerator:
+    """
+    Class responsible for maze generation and solving logic.
+
+    Attributes:
+        width (int): The width of the maze (in cells).
+        height (int): The height of the maze (in cells).
+        entry (tuple[int, int]): The entry coordinates.
+        exit (tuple[int, int]): The exit coordinates.
+        the_seed (str | None): The seed for random generation.
+        all_cell (list[Cell]): List containing all the cells of the maze.
+        all_isolated (list[Any]): List of isolated cell coordinates.
+        solve (list[tuple[int, int]]): The generated path to solve the maze.
+    """
     def __init__(
         self,
         width: int,
@@ -15,6 +28,16 @@ class MazeGenerator:
         exit_xy: tuple[int, int],
         the_seed: str | None,
     ) -> None:
+        """
+        Initialize the maze generator.
+
+        Args:
+            width (int): The width of the maze.
+            height (int): The height of the maze.
+            entry_xy (tuple[int, int]): The entry cell coordinates.
+            exit_xy (tuple[int, int]): The exit cell coordinates.
+            the_seed (str | None): Seed for the random number generator.
+        """
         self.width = width
         self.height = height
         self.entry = entry_xy
@@ -28,6 +51,9 @@ class MazeGenerator:
         self.solve: list[tuple[int, int]] = []
 
     def create_all_cells(self) -> None:
+        """
+        Create and populate the maze with fully walled cells.
+        """
         for i in range(self.height):
             for j in range(self.width):
                 self.all_cell.append(
@@ -35,6 +61,13 @@ class MazeGenerator:
                 )
 
     def isolated_cells(self) -> list[tuple[int, int]]:
+        """
+        Define and retrieve a list of isolated cells in the center of the maze.
+
+        Returns:
+            list[tuple[int, int]]: A list of (x, y) coordinates for
+                isolated cells.
+        """
         self.all_isolated.extend(
             [
                 (self.width // 2 - 3, self.height // 2 - 2),
@@ -60,9 +93,30 @@ class MazeGenerator:
         return list(self.all_isolated)
 
     def get_cell(self, x: int, y: int) -> Cell:
+        """
+        Retrieve a specific cell from the maze based on its coordinates.
+
+        Args:
+            x (int): The x-coordinate of the cell.
+            y (int): The y-coordinate of the cell.
+
+        Returns:
+            Cell: The cell object located at (x, y).
+        """
         return self.all_cell[y * self.width + x]
 
     def neighbors(self, x: int, y: int) -> list[tuple[int, int]]:
+        """
+        Find the valid neighboring coordinates for a given cell.
+
+        Args:
+            x (int): The x-coordinate of the current cell.
+            y (int): The y-coordinate of the current cell.
+
+        Returns:
+            list[tuple[int, int]]: A list of valid
+                neighboring (x, y) coordinates.
+        """
         n = []
 
         if x > 0:
@@ -76,7 +130,13 @@ class MazeGenerator:
         return n
 
     def generated_maze_dfs(self) -> list[tuple[int, int]]:
+        """
+        Generate a perfect maze using the Depth-First Search (DFS) algorithm.
 
+        Returns:
+            list[tuple[int, int]]: The sequence of cell
+                coordinates generated in order.
+        """
         stack = []
         visited = set()
         all_path = []
@@ -129,6 +189,13 @@ class MazeGenerator:
         return all_path
 
     def generated_maze_prim_s(self) -> list[tuple[int, int]]:
+        """
+        Generate a perfect maze using a randomized Prim's algorithm.
+
+        Returns:
+            list[tuple[int, int]]: The sequence of cell
+                coordinates generated in order.
+        """
         frontier = []
         visited = set()
         all_path = []
@@ -180,7 +247,16 @@ class MazeGenerator:
         return all_path
 
     def is_open_3x3(self, x0: int, y0: int) -> bool:
-        # murs horizontal (2, 0)
+        """
+        Check if a 3x3 block of cells is completely open (no interior walls).
+
+        Args:
+            x0 (int): The starting x-coordinate for the block.
+            y0 (int): The starting y-coordinate for the block.
+
+        Returns:
+            bool: True if the 3x3 area is open, False otherwise.
+        """
         for x in range(x0, x0 + 3):
             for y in range(y0, y0 + 2):
                 c1 = self.get_cell(x, y)
@@ -188,7 +264,6 @@ class MazeGenerator:
                 if c1.wall[2][0] or c2.wall[0][0]:
                     return False
 
-        # murs vertical (3, 1)
         for y in range(y0, y0 + 3):
             for x in range(x0, x0 + 2):
                 c1 = self.get_cell(x, y)
@@ -199,6 +274,13 @@ class MazeGenerator:
         return True
 
     def imperfect_maze(self, a_cell: Cell) -> None:
+        """
+        Randomly remove walls to convert a perfect maze into an
+            imperfect maze.
+
+        Args:
+            a_cell (Cell): The cell to potentially modify.
+        """
         destroy_or_not = 0.15
 
         all_walls = {
@@ -267,7 +349,22 @@ class MazeGenerator:
         outline_thickness: int,
         CELL_SIZE: int,
     ) -> list[tuple[int, int]]:
+        """
+        Solve the maze using the Depth-First Search (DFS) algorithm.
 
+        Args:
+            entry_x (int): Pixel x-coordinate of the entry point.
+            entry_y (int): Pixel y-coordinate of the entry point.
+            exit_x (int): Pixel x-coordinate of the exit point.
+            exit_y (int): Pixel y-coordinate of the exit point.
+            outline_thickness (int): The thickness of the cell outline
+                in pixels.
+            CELL_SIZE (int): The width and height of a cell in pixels.
+
+        Returns:
+            list[tuple[int, int]]: A list of coordinates representing
+                the solution path.
+        """
         stack = []
         visited = set()
 
@@ -319,6 +416,22 @@ class MazeGenerator:
         outline_thickness: int,
         cell_size: int,
     ) -> list[tuple[int, int]]:
+        """
+        Solve the maze using the Breadth-First Search (BFS) algorithm.
+
+        Args:
+            entry_x (int): Pixel x-coordinate of the entry point.
+            entry_y (int): Pixel y-coordinate of the entry point.
+            exit_x (int): Pixel x-coordinate of the exit point.
+            exit_y (int): Pixel y-coordinate of the exit point.
+            outline_thickness (int): The thickness of the cell outline
+                in pixels.
+            cell_size (int): The width and height of a cell in pixels.
+
+        Returns:
+            list[tuple[int, int]]: A list of coordinates representing
+                the shortest solution path.
+        """
 
         the_file = []
         his_parents: dict[tuple[int, int], tuple[int, int]] = {}

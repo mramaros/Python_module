@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Module handling mouse and keyboard events for the MLX window."""
 
 
 from typing import Any
@@ -9,7 +10,13 @@ import random
 
 
 def start_maze(state: dict[str, Any]) -> None:
-    """Fonction utilitaire pour lancer le labyrinthe."""
+    """
+    Utility function to initialize and start the maze gameplay.
+
+    Args:
+        state (dict[str, Any]): The global state dictionary
+            containing application variables.
+    """
     state["my_window"].clear_img()
     state["start_screen"][0] = False
     state["tmp_sms"][0] = False
@@ -25,7 +32,15 @@ def start_maze(state: dict[str, Any]) -> None:
 def custom_handle_mouse(
     button: int, x: int, y: int, state: dict[str, Any]
 ) -> None:
-    # la souri
+    """
+    Handle mouse click events within the MLX window.
+
+    Args:
+        button (int): The ID of the mouse button clicked.
+        x (int): The x-coordinate of the mouse cursor.
+        y (int): The y-coordinate of the mouse cursor.
+        state (dict[str, Any]): The global state dictionary.
+    """
     if state["tmp_sms"][0]:
         if state["start_screen"][0] and button == 1:
             x1, y1, x2, y2 = state["box_bounds"]
@@ -40,8 +55,18 @@ def custom_handle_mouse(
 
 def custom_handle_keypress(keycode: int, state: dict[str, Any]) -> None:
     """
-    Gestionnaire des événements clavier pour A-Maze-ing.
-    Enter: Start ; 1: regen; 2: path; 3: color; 4: quit
+    Handle keyboard events for the A-Maze-ing application.
+
+    Keys:
+        Enter: Start
+        1: Regenerate maze
+        2: Toggle path (solver)
+        3: Change color
+        4: Quit
+
+    Args:
+        keycode (int): The keycode representing the pressed key.
+        state (dict[str, Any]): The global state dictionary.
     """
     w = state["my_window"]
 

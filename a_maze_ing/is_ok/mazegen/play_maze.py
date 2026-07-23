@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""Module defining the interactive gameplay mechanics."""
 
 from typing import Any, Protocol
 from .classe_maze_generator import MazeGenerator
@@ -13,7 +13,13 @@ KEY_DOWN = 65364
 
 
 class GameStateLike(Protocol):
-    """Structural stand-in for classe_gamer.GameState (not provided)."""
+    """
+    Structural stand-in for the game state protocol.
+
+    Attributes:
+        pos (tuple[int, int]): Current coordinates of the player.
+        play_or_not (bool): Flag determining if the game is playable.
+    """
 
     pos: tuple[int, int]
     play_or_not: bool
@@ -32,6 +38,22 @@ def play_the_maze(
     WIDTH: int,
     HEIGHT: int,
 ) -> None:
+    """
+    Process player movement and handle game completion logic.
+
+    Args:
+        keycode (int): The directional keycode mapped to an arrow key.
+        all_stat (dict[str, Any]): Dictionary containing global app state.
+        class_maze (MazeGenerator): The instantiated maze class.
+        the_window (MazeMlx): The instantiated MLX renderer.
+        all_cell (list[Cell]): List of all maze cells.
+        isoler (list[tuple[int, int]]): List of isolated cell coordinates.
+        state (GameStateLike): The current player's game state.
+        true_entry (tuple[int, int]): Initial starting point coordinates.
+        tuple_exit (tuple[int, int]): Finish point coordinates.
+        WIDTH (int): Total width in cells.
+        HEIGHT (int): Total height in cells.
+    """
 
     space = "    "
     space1 = "                  "

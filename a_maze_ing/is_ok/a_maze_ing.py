@@ -30,6 +30,14 @@ title = [
 def check_the_repetitives(
     key: str, pre_dict: list[str], sms: list[str]
 ) -> None:
+    """
+    Check for repetitive keys in the configuration dictionary.
+
+    Args:
+        key (str): The configuration key to check for duplicates.
+        pre_dict (list[str]): The raw list of configuration strings.
+        sms (list[str]): A list used to append warning messages.
+    """
     count = 0
 
     for pseudo_key in pre_dict:
@@ -42,6 +50,15 @@ def check_the_repetitives(
 
 
 def read_config(the_file: str) -> list[str]:
+    """
+    Read a configuration file and return its lines stripped of newlines.
+
+    Args:
+        the_file (str): The path to the configuration file.
+
+    Returns:
+        list[str]: A list containing the processed lines of the file.
+    """
     config = []
     with open(the_file, "r") as res:
         for line in res:
@@ -50,10 +67,35 @@ def read_config(the_file: str) -> list[str]:
 
 
 def input_the_congif_maze(the_file: str) -> list[str]:
+    """
+    Input the configuration for the maze from a specific file.
+
+    Args:
+        the_file (str): The path to the configuration file.
+
+    Returns:
+        list[str]: A list containing the read lines of the configuration file.
+    """
     return read_config(the_file)
 
 
 def take_config(argv: str, sms: list[str]) -> dict[str, str]:
+    """
+        Parse the configuration file and extract settings into a dictionary.
+
+        Args:
+            argv (str): The path to the configuration file to be read.
+            sms (list[str]): A list to collect warning messages for
+                repetitive keys.
+
+        Raises:
+            SyntaxError: If a configuration line has invalid syntax or
+                empty values.
+            ValueError: If an unrecognized key is present in the configuration.
+
+        Returns:
+            dict[str, str]: A dictionary containing the parsed key-value pairs.
+    """
     config = read_config(argv)
     true_config = []
     the_dict = {}
