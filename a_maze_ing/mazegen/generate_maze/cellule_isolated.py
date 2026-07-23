@@ -1,26 +1,21 @@
-def isolated_cells(WIDTH, HEIGHT) -> set:
-    """
-    Retourne un ensemble de coordonnées (x,y) représentant les cellules isolées.
-        Celui de "42" principalement, mais aussi d'autres cellules autour de celle-ci.
-    Ces cellules ne seront pas visitées lors de la génération du labyrinthe.
-    """
-    return {
-        (WIDTH // 2 - 1, HEIGHT // 2),
-        (WIDTH // 2 - 2, HEIGHT // 2),
-        (WIDTH // 2 - 3, HEIGHT // 2),
-        (WIDTH // 2 + 1, HEIGHT // 2),
-        (WIDTH // 2 + 2, HEIGHT // 2),
-        (WIDTH // 2 + 3, HEIGHT // 2),
-        (WIDTH // 2 - 3, HEIGHT // 2 - 1),
-        (WIDTH // 2 - 3, HEIGHT // 2 - 2),
-        (WIDTH // 2 - 1, HEIGHT // 2 + 1),
-        (WIDTH // 2 - 1, HEIGHT // 2 + 2),
-        (WIDTH // 2 + 1, HEIGHT // 2 + 1),
-        (WIDTH // 2 + 1, HEIGHT // 2 + 2),
-        (WIDTH // 2 + 3, HEIGHT // 2 - 1),
-        (WIDTH // 2 + 3, HEIGHT // 2 - 2),
-        (WIDTH // 2 + 2, HEIGHT // 2 - 2),
-        (WIDTH // 2 + 1, HEIGHT // 2 - 2),
-        (WIDTH // 2 + 2, HEIGHT // 2 + 2),
-        (WIDTH // 2 + 3, HEIGHT // 2 + 2),
-    }
+def isolated_cells(width: int, height: int) -> list[tuple[int, int]]:
+    return [
+        (width // 2 - 3, height // 2 - 2),
+        (width // 2 - 3, height // 2 - 1),
+        (width // 2 - 3, height // 2),
+        (width // 2 - 2, height // 2),
+        (width // 2 - 1, height // 2),
+        (width // 2 - 1, height // 2 + 1),
+        (width // 2 - 1, height // 2 + 2),
+        (width // 2 + 3, height // 2 + 2),
+        (width // 2 + 2, height // 2 + 2),
+        (width // 2 + 1, height // 2 + 2),
+        (width // 2 + 1, height // 2 + 1),
+        (width // 2 + 1, height // 2),
+        (width // 2 + 2, height // 2),
+        (width // 2 + 3, height // 2),
+        (width // 2 + 3, height // 2 - 1),
+        (width // 2 + 3, height // 2 - 2),
+        (width // 2 + 2, height // 2 - 2),
+        (width // 2 + 1, height // 2 - 2),
+    ]

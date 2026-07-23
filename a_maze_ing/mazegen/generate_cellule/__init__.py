@@ -1,13 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    __init__.py                                        :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mramaros <mramaros@student.42antananarivo  +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/06/09 06:43:32 by mramaros          #+#    #+#              #
-#    Updated: 2026/06/09 06:44:18 by mramaros         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+#!/usr/bin/env python3
 
-from .generate_cellule import Cell, create_all_cells, get_cell
+
+from .generate_cellule import Cell as Cell
+from .generate_cellule import get_cell
+
+__all__ = ["Cell", "get_cell"]

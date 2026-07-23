@@ -1,0 +1,17 @@
+[project]
+name = "mazegen"
+version = "0.1.0"
+description = "creat maze"
+authors = [
+    {name = "raaron-v and mramaros"}
+]
+requires-python = ">=3.11"
+dependencies = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "mypy (>=2.3.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
